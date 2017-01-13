@@ -14,4 +14,3 @@ AppUser::init();
 
 // route based on url path
 $router = new Router();
-$router->route();

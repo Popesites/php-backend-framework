@@ -14,6 +14,7 @@ class Router {
 		$this->set_controller();
 		$this->set_method();
 		$this->set_params();
+		$this->route();
 	}
 
 	function set_path () {
