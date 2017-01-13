@@ -6,25 +6,7 @@ include 'vendor/autoload.php';
 // initialize db
 DB::set_pdo();
 
-if (isset($argv[1]) && isset($argv[2]) && $argv[1] == 'import' && $argv[2] == 'db') {
-	// php cli import db
-	$stm = DB::$pdo->prepare('show tables like `config`');
-	$stm->execute();
-	$res = $stm->fetchColumn();
-
-	if (!empty($res)) {
-		// db does not exists, install it
-		$stm = DB::$pdo->prepare(file_get_contents('db.sql'));
-		$stm->execute();
-
-		echo 'Database tables imported successfully';
-	}
-	else {
-		// db exists, echo error
-		echo 'Database tables already exist';
-	}
-}
-else if (isset($argv[1]) && $argv[1] == 'generate') {
+if (isset($argv[1]) && $argv[1] == 'generate') {
 	// php cli generate "object" columns
 	if (isset($argv[2])) {
 		// object name set, check if it exists

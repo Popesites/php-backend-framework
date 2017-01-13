@@ -20,7 +20,7 @@ else {
 }
 
 // non-environment based constants
-define('VERSION', '1.00');
+define('VERSION', '1.02');
 
 // available user permissions
 define('USER_PERMISSIONS', json_encode([
