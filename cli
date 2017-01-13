@@ -1,0 +1,85 @@
+<?php
+
+// include config constants & composer autoload
+include 'vendor/autoload.php';
+
+// initialize db
+DB::set_pdo();
+
+if (isset($argv[1]) && isset($argv[2]) && $argv[1] == 'import' && $argv[2] == 'db') {
+	// php cli import db
+	$stm = DB::$pdo->prepare('show tables like `config`');
+	$stm->execute();
+	$res = $stm->fetchColumn();
+
+	if (!empty($res)) {
+		// db does not exists, install it
+		$stm = DB::$pdo->prepare(file_get_contents('db.sql'));
+		$stm->execute();
+
+		echo 'Database tables imported successfully';
+	}
+	else {
+		// db exists, echo error
+		echo 'Database tables already exist';
+	}
+}
+else if (isset($argv[1]) && $argv[1] == 'generate') {
+	// php cli generate "object" columns
+	if (isset($argv[2])) {
+		// object name set, check if it exists
+		$columns = (isset($argv[3])) ? $argv[3] : null;
+		$generator = new ObjectGenerator($argv[2], $columns);
+
+		if (!$generator->object_exists()) {
+			// object does not exist, run file and db methods
+			$generator->create_db_table();
+			$generator->insert_permissions();
+			$generator->insert_menu_item();
+			$generator->create_model();
+			$generator->create_controller();
+			$generator->create_views();
+
+			// update composer autoload
+			exec('composer update');
+
+			echo 'Object generated successfully';
+		}
+		else {
+			// object exists, echo error
+			echo 'Object already exists';
+		}
+	}
+	else {
+		// object name is not set, echo error
+		echo 'Object name is required';
+	}
+}
+else if (isset($argv[1]) && $argv[1] == 'delete') {
+	// php cli delete "object"
+	if (isset($argv[2])) {
+		// object name set, check if it exists
+		$generator = new ObjectGenerator($argv[2]);
+
+		if ($generator->object_exists()) {
+			// object exists, delete it
+			$generator->drop_db_table();
+			$generator->delete_permissions();
+			$generator->delete_menu_item();
+			$generator->delete_files();
+
+			// update composer autoload
+			exec('composer update');
+
+			echo 'Object deleted successfully';
+		}
+		else {
+			// object exists, echo error
+			echo 'Object does not exist';
+		}
+	}
+	else {
+		// object name is not set, echo error
+		echo 'Object name is required';
+	}
+}

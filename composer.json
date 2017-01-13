@@ -1,0 +1,25 @@
+{
+  "name": "kjdion84/php-backend-framework",
+  "type": "project",
+  "description": "A simple and easy-to-use PHP backend framework.",
+  "keywords": ["php", "backend", "framework", "mvc", "adminlte"],
+  "homepage": "https://github.com/kjdion84/php-backend-framework",
+  "license": "MIT",
+  "authors": [
+	{
+	  "name": "Kevin Dion",
+	  "email": "kjdion84@gmail.com",
+	  "role": "Developer"
+	}
+  ],
+  "autoload": {
+	"files": ["config.php"],
+	"classmap": ["app/controllers/", "app/models/", "helpers/"]
+  },
+  "require": {
+	"php": ">=5.3",
+	"phpmailer/phpmailer": "*",
+	"mmucklo/inflect": "*",
+	"ircmaxell/password-compat": "*"
+  }
+}
